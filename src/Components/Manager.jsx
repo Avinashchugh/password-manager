@@ -79,10 +79,10 @@ const Manager = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center py-3">
           <button
             onClick={savePassword}
-            className="flex justify-center items-center bg-green-400 hover:bg-green-300 rounded-full px-3 py-2"
+            className="flex justify-center items-center bg-green-400 hover:bg-green-300 rounded-full px-3 py-2 gap-2"
           >
             <lord-icon
               src="https://cdn.lordicon.com/jgnvfzqg.json"
