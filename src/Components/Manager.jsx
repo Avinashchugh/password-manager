@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaRegEye } from "react-icons/fa";
+
 const Manager = () => {
   const [form, setForm] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([]);
+
   useEffect(() => {
     let passwords = localStorage.getItem("passwords");
     if (passwords) {
@@ -11,18 +13,23 @@ const Manager = () => {
   }, []);
 
   const savePassword = () => {
-    console.log(form);
     setPasswordArray([...passwordArray, form]);
-    localStorage.getItem("passwords", JSON.stringify([...passwordArray, form]));
-    console.log([...passwordArray, form]);
+    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
   };
+
   const showPassword = () => {
-    alert("Show the password");
+    const passwordInput = document.getElementById("passwordInput");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
   };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   return (
     <>
       <div className="mycontainer mx-auto">
@@ -31,32 +38,33 @@ const Manager = () => {
           <span>Pass</span>
           <span className="text-green-700">OP/&gt;</span>
         </div>
-        <p className="text-green-700 text-center text-bold">
+        <p className="text-green-700 text-center font-bold">
           Your own password manager
         </p>
 
         <div className="flex flex-col p-4 text-black gap-8 items-center">
           <input
-            className="rounded-full border border-green-500 w-full p-4 py-1"
+            className="rounded-full border border-green-500 w-full p-4 py-1 mb-4"
             type="text"
             value={form.site}
             placeholder="Enter your website"
             onChange={handleChange}
             name="site"
           />
-          <div className="flex w-full justify-between gap-8">
+          <div className="flex gap-8 w-full">
             <input
-              className="rounded-full border border-green-500 w-full p-4 py-1"
+              className="rounded-full border border-green-500 flex-1 p-4 py-1"
               type="text"
               placeholder="Enter your username"
               value={form.username}
               onChange={handleChange}
               name="username"
             />
-            <div className="relative">
-                <input
+            <div className="relative flex-1">
+              <input
+                id="passwordInput"
                 className="rounded-full border border-green-500 w-full p-4 py-1"
-                type="text"
+                type="password"
                 placeholder="Enter password"
                 value={form.password}
                 onChange={handleChange}
@@ -84,33 +92,34 @@ const Manager = () => {
           </button>
         </div>
         <div className="passwords">
-          <h2>Your Passwords</h2>
-          <table class="table-auto w-full ">
-            <thead className=" bg-green-800 text-white">
-              <tr>
-                <th className="text-center">Song</th>
-                <th className="text-center">Artist</th>
-                <th className="text-center">Year</th>
-              </tr>
-            </thead>
-            <tbody className="bg-green-100 ">
-              <tr>
-                <td className="text-center w-32">The Sliding Mr. Bones</td>
-                <td className="text-center w-32">Malcolm Lockyer</td>
-                <td className="text-center w-32">1961</td>
-              </tr>
-              <tr>
-                <td className="text-center w-32">Witchy Woman</td>
-                <td className="text-center w-32">The Eagles</td>
-                <td className="text-center w-32">1972</td>
-              </tr>
-              <tr>
-                <td className="text-center w-32">Shining Star</td>
-                <td className="text-center w-32">Earth, Wind, and Fire</td>
-                <td className="text-center w-32">1975</td>
-              </tr>
-            </tbody>
-          </table>
+          <h2 className="font-bold text-2xl py-4 text-center">
+            Your Passwords
+          </h2>
+          {passwordArray.length === 0 && (
+            <div className="text-center">No password to show</div>
+          )}
+          {passwordArray.length !== 0 && (
+            <table className="table-auto w-full">
+              <thead className="bg-green-800 text-white">
+                <tr>
+                  <th className="text-center">Website</th>
+                  <th className="text-center">Username</th>
+                  <th className="text-center">Password</th>
+                </tr>
+              </thead>
+              <tbody className="bg-green-100">
+                {passwordArray.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="text-center">{item.site}</td>
+                      <td className="text-center">{item.username}</td>
+                      <td className="text-center">{item.password}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>
